@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message product{
+    int32 id_product = 1;
+}
+
+message Transactionresponse{
+    int32 status_code = 1;
+}
+
+service Productservice{
+    rpd addproduct(product) returns (Transactionresponse) {}
+}
