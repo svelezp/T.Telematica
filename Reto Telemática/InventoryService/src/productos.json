@@ -1,0 +1,7 @@
+{
+    "Mouse de pc":{"Cantidad":5, "Precio":30000},
+    "Juego de platos":{"Cantidad":9, "Precio":15000},
+    "Mesa de madera":{"Cantidad":3, "Precio":300000},
+    "Juego de cubiertos":{"Cantidad":20, "Precio":10000},
+    "Batidora":{"Cantidad":32, "Precio":80000}
+}
