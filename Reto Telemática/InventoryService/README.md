@@ -1,0 +1,2 @@
+Aquí se encuentra lo trabajado para el reto 1 de Tópicos de telemática.
+Lo realizado, consiste en la definición de un microservicio, un archivo .json que actua como su propia base de datos, y lo ya realizado en el laboratorio 1 de la materia.
