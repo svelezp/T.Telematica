@@ -1,1 +1,0 @@
-catalogo = {'juego de platos':50000, 'mouse de computadora':80000, 'audifonos inalambricos':40000}
