@@ -20,12 +20,12 @@ service InventoryService{
 }
 
 service ShoppingCartService{
-    rpc add_product(HardRequest) returns (EasyRequest)
-    rpc delete_product(EasyRequest) returns (EasyRequest) 
-    rpc show_list(EasyRequest) returns (EasyRequest)   
+    rpc add_product(HardRequest) returns (EasyRequest) {}
+    rpc delete_product(HardRequest) returns (EasyRequest) {}
+    rpc show_list(EasyRequest) returns (EasyRequest) {}  
 
 }
 
 service PaymentService{
-    rpc checking(EasyRequest) returns (EasyRequest)
+    rpc checking(EasyRequest) returns (HardRequest) {}
 }

@@ -10,17 +10,19 @@ const PROTO_PATH = process.env.PROTO_PATH;
 const REMOTE_HOST = process.env.REMOTE_HOST;
 
 const packageDefinition = protoLoader.loadSync(
-    PROTO_PATH,
-    {keepCase: true,
-     longs: String,
-     enums: String,
-     defaults: true,
-     oneofs: true
-    });
+  PROTO_PATH,
+  {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true
+  });
 
 console.info("Consumer service is started...");
 
 const address = "localhost:8081";
+const proto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server();
 
 const inventoryService = grpc.loadPackageDefinition(packageDefinition).InventoryService;
@@ -28,48 +30,76 @@ const getInventory = new inventoryService(REMOTE_HOST, grpc.credentials.createIn
 let inventory = {};
 getInv();
 
-server.addService(proto.MOMService.service, {
+server.addService(proto.ShoppingCartService.service, {
   add_product: (call, callback) => {
     const user = call.request.package;
     const item = call.request.container;
     getInv();
     let rawdata;
     if (fs.existsSync(user.concat('', '.json'))) {
-      rawdata = JSON.parse(fs.readFileSync(user.concat('','.json'), 'utf-8'));
-      if(rawdata[item])
+      rawdata = JSON.parse(fs.readFileSync(user.concat('', '.json'), 'utf-8'));
+      if (rawdata[item])
         rawdata[item] += 1;
       else rawdata[item] = 1;
-    }else{
-      rawdata = JSON.parse({item:1});
+    } else {
+      rawdata = JSON.parse({ item: 1 });
     }
+    let data = JSON.stringify(rawdata);
+    fs.writeFileSync((user.concat('', '.json'), 'utf-8'), data);
     inventory[item]
     JSON.parse();
-    callback(null, { package:"Wrong user or password" });
+    callback(null, { package: "agregao" });
   },
+
   delete_product: (call, callback) => {
-    JSON.parse(call.request.package);
-    callback(null, { package: "Wrong user or password" });
+    const user = call.request.package;
+    const item = call.request.container;
+    getInv();
+    let rawdata
+    let data = JSON.stringify(rawdata)
+    if (fs.existsSync(user.concat('', '.json'))) {
+      rawdata = JSON.parse(fs.readFileSync(user.concat('', '.json'), 'utf-8'));
+      if (rawdata[item]) {
+        if (rawdata[item] > 1) {
+          rawdata[item] - 1;
+        } else {
+          delete rawdata[item];
+        }
+        fs.writeFileSync((user.concat('', '.json'), 'utf-8'), data);
+        callback(null, { package: "Eliminao " })
+      }
+      else callback(null, { package: "no se ha eleminao na" })
+    }
+    else callback(null, { package: "No existes bro" });
   },
+
   show_list: (call, callback) => {
-    JSON.parse(call.request.package);
-    callback(null, { package: "Wrong user or password" });
+    const user = call.request.package;
+    getInv();
+    let rawdata
+    if (fs.existsSync(user.concat('', '.json'))) {
+      rawdata = fs.readFileSync(user.concat('', '.json'), 'utf-8')
+      rawdata = JSON.parse(rawdata);
+      callback(null, { package: rawdata });
+    } else
+      callback(null, { package: "No existe ese usuario" });
   }
 });
 
-function getInv(){
+function getInv() {
   getInventory.list_products({}, (err, data) => {
     if (err) {//Si hay un error
       console.log(err);
-    } else{
-      inventory = JSON.dumps(data["package"])// como volver string a dictionario node js
+    } else {
+      inventory = JSON.parse(data["package"].replace(/'/g, '"'));
     }
   });
 }
 
 server.bindAsync(//Se inicia el lado servidor para recibir requests del Proxy
-      address,
-      grpc.ServerCredentials.createInsecure(),
-      (error, port) => {
-        console.log("Server running at ", address);
-        server.start();
-      });
+  address,
+  grpc.ServerCredentials.createInsecure(),
+  (error, port) => {
+    console.log("Server running at ", address);
+    server.start();
+  });
