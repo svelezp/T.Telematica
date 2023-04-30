@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message NoRequest{
+}
+
+message EasyRequest{
+    string package = 1;
+}
+
+message HardRequest{
+    string package = 1;
+    string container = 2;
+}
+
+service InventoryService{
+    rpc add_product(HardRequest) returns (EasyRequest) {}
+    rpc update_quantity(HardRequest) returns (EasyRequest) {}
+    rpc get_product_by_name(EasyRequest) returns (EasyRequest) {}
+    rpc list_products(NoRequest) returns (EasyRequest) {}
+}
