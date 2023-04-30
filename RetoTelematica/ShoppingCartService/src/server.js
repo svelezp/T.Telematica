@@ -42,12 +42,11 @@ server.addService(proto.ShoppingCartService.service, {
         rawdata[item] += 1;
       else rawdata[item] = 1;
     } else {
-      rawdata = JSON.parse({ item: 1 });
+      rawdata = {};
+      rawdata[item] = 1;
     }
-    let data = JSON.stringify(rawdata);
-    fs.writeFileSync((user.concat('', '.json'), 'utf-8'), data);
-    inventory[item]
-    JSON.parse();
+    let data = JSON.stringify(rawdata, null, 4);
+    fs.writeFileSync(user.concat('', '.json'), data);
     callback(null, { package: "agregao" });
   },
 
@@ -55,17 +54,17 @@ server.addService(proto.ShoppingCartService.service, {
     const user = call.request.package;
     const item = call.request.container;
     getInv();
-    let rawdata
-    let data = JSON.stringify(rawdata)
+    let rawdata;
     if (fs.existsSync(user.concat('', '.json'))) {
       rawdata = JSON.parse(fs.readFileSync(user.concat('', '.json'), 'utf-8'));
       if (rawdata[item]) {
         if (rawdata[item] > 1) {
-          rawdata[item] - 1;
+          rawdata[item] -= 1;
         } else {
           delete rawdata[item];
         }
-        fs.writeFileSync((user.concat('', '.json'), 'utf-8'), data);
+        let data = JSON.stringify(rawdata, null, 4);
+        fs.writeFileSync(user.concat('', '.json'), data);
         callback(null, { package: "Eliminao " })
       }
       else callback(null, { package: "no se ha eleminao na" })
@@ -78,8 +77,7 @@ server.addService(proto.ShoppingCartService.service, {
     getInv();
     let rawdata
     if (fs.existsSync(user.concat('', '.json'))) {
-      rawdata = fs.readFileSync(user.concat('', '.json'), 'utf-8')
-      rawdata = JSON.parse(rawdata);
+      rawdata = fs.readFileSync(user.concat('', '.json'));
       callback(null, { package: rawdata });
     } else
       callback(null, { package: "No existe ese usuario" });
