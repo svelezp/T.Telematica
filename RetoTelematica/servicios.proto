@@ -18,3 +18,14 @@ service InventoryService{
     rpc get_product_by_name(EasyRequest) returns (EasyRequest) {}
     rpc list_products(NoRequest) returns (EasyRequest) {}
 }
+
+service ShoppingCartService{
+    rpc add_product(HardRequest) returns (EasyRequest)
+    rpc delete_product(EasyRequest) returns (EasyRequest) 
+    rpc show_list(EasyRequest) returns (EasyRequest)   
+
+}
+
+service PaymentService{
+    rpc checking(EasyRequest) returns (EasyRequest)
+}
