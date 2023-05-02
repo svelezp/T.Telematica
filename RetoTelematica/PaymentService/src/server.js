@@ -21,7 +21,7 @@ const packageDefinition = protoLoader.loadSync(
 
 console.info("Consumer service is started...");
 
-const address = "localhost:8082";
+const address = "0.0.0.0:8080";
 const proto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server();
 
